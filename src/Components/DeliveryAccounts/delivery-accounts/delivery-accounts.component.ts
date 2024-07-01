@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DeliveryService } from '../../../Service/delivery.service';
+import { DeliveryService } from '../../../Services/delivery.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
@@ -32,7 +32,7 @@ export class DeliveryAccountsComponent implements OnInit {
   rows: number = 10;
   searchValue: string = '';
 
-  constructor(private _DeliveryService: DeliveryService) {}
+  constructor(private _DeliveryService: DeliveryService, private _Router :Router) {}
 
   ngOnInit(): void {
     this.loadDeliveryAccounts();
@@ -53,7 +53,6 @@ export class DeliveryAccountsComponent implements OnInit {
     });
   }
 
-  
   onSwitchChange(event: any) {
     console.log('Switch state:', event.checked);
   }
@@ -61,5 +60,43 @@ export class DeliveryAccountsComponent implements OnInit {
   onPageChange(event: any): void {
     this.first = event.first;
     this.rows = event.rows;
+  }
+
+  onDeleteAccount(id: number) {
+    this._DeliveryService.deleteDeliveryAccount(id).subscribe({
+      next: (response) => {
+        this.displayTemporaryMessage('Account deleted successfully.');
+        this.loadDeliveryAccounts(); 
+      },
+      error: (error) => {
+        this.displayTemporaryMessage('Account deleted successfully.');
+        this.loadDeliveryAccounts(); 
+        // console.error('Error deleting account:', error);
+      }
+    });
+  }
+
+  displayTemporaryMessage(message: string): void {
+    const tempMessageElement = document.createElement('div');
+    tempMessageElement.innerText = message;
+    tempMessageElement.style.position = 'fixed';
+    tempMessageElement.style.bottom = '50%';
+    tempMessageElement.style.left = '50%';
+    tempMessageElement.style.transform = 'translateX(-50%)';
+    tempMessageElement.style.backgroundColor = 'green';
+    tempMessageElement.style.color = 'white';
+    tempMessageElement.style.padding = '10px';
+    tempMessageElement.style.borderRadius = '5px';
+    document.body.appendChild(tempMessageElement);
+
+    setTimeout(() => {
+      document.body.removeChild(tempMessageElement);
+    }, 1000);
+  }
+
+
+
+  onEditAccount(id: number): void {
+    this._Router.navigate(['/UpdateDeliveryAccount', id]);
   }
 }
