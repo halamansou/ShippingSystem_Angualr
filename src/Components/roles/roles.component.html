@@ -1,19 +1,42 @@
-<p-card class="card mt-5 mb-3">
-  <div class="d-flex justify-content-between">
-    <button
+<!-- <p-card class="card mt-5 mb-3">
+ <button
       class="btn btn-primary rounded fs-5 p-2"
       type="button"
       class="btn btn-primary"
       data-bs-toggle="modal"
       data-bs-target="#exampleModal"
+      [disabled]="!permissions[0].canCreate"
     >
-      <i class="bi bi-plus-square"></i>
+      <i class="bi bi-shield-plus"></i>
       إضافة صلاحية
-    </button>
+    </button> 
     <span class="fs-3 fw-bold text-end">الصلاحيات</span>
   </div>
-</p-card>
+</p-card> -->
 
+<div class="card flex-fill border-0 illustration mb-3 mt-5">
+  <div class="card-body p-0 d-flex flex-fill">
+    <div class="row g-0 w-100 text-center">
+      <div class="col-6 p-3 d-flex align-baseline">
+        <button
+          class="btn btn-primary rounded fs-5 p-2"
+          type="button"
+          class="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          [disabled]="!permissions.length || !permissions[0].canCreate"
+        >
+          <i class="bi bi-shield-plus"></i>
+          إضافة صلاحية
+        </button>
+      </div>
+
+      <div class="col-6 p-3 fw-bold text-end">
+        <h4>الصلاحيات</h4>
+      </div>
+    </div>
+  </div>
+</div>
 <p-table
   #dt2
   [value]="Roles"
@@ -35,19 +58,18 @@
         <i class="bi bi-arrow-repeat"></i>
       </button>
       <span class="p-input-icon-left ml-auto">
-        <i class="bi bi-search"></i>
         <input
           pInputText
           type="text"
           [(ngModel)]="searchValue"
           (input)="onInput($event)"
+          placeholder="البحث"
         />
       </span>
     </div>
   </ng-template>
   <ng-template pTemplate="header">
     <tr>
-      <th></th>
       <th>الإعدادات</th>
 
       <th>تاريخ الإضافة</th>
@@ -56,19 +78,22 @@
   </ng-template>
   <ng-template pTemplate="body" let-role>
     <tr>
-      <td></td>
       <td>
         <button
-          class="btn btn-secondary mx-1"
           type="button"
           class="btn btn-primary"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal"
           (click)="changeIdVal(role.id)"
+          [disabled]="!permissions.length || !permissions[0].canWrite"
         >
           <i class="bi bi-pen"></i>
         </button>
-        <button class="btn btn-danger mx-1" (click)="Delete(role.id)">
+        <button
+          [disabled]="!permissions.length || !permissions[0].canDelete"
+          class="btn btn-danger mx-1"
+          (click)="Delete(role.id)"
+        >
           <i class="bi bi-trash2"></i>
         </button>
         <button
@@ -98,3 +123,4 @@
 <div class="card flex justify-content-center">
   <p-toast />
 </div>
+<!-- ------------------------------------------------------------ -->

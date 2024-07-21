@@ -1,14 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { TableSharedModule } from '../../../shared/TableShared.module';
-import { RolesService } from '../../../AbdallahServices/roles.service';
+
+import { RolesService } from '../../../Services/roles.service';
 import { Table } from 'primeng/table';
-import { ActivatedRoute, RouterLinkActive } from '@angular/router';
+import { ActivatedRoute, Router, RouterLinkActive } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-permissions',
   standalone: true,
-  imports: [TableSharedModule,RouterLinkActive],
+  imports: [SharedModule,RouterLinkActive],
   templateUrl: './permissions.component.html',
   styleUrl: './permissions.component.css'
 })
@@ -23,7 +24,7 @@ export class PermissionsComponent implements OnInit {
   /**
    *
    */
-  constructor( private roleService:RolesService , public activeRoute:ActivatedRoute,private messageService: MessageService) {
+  constructor( private roleService:RolesService , public activeRoute:ActivatedRoute,private messageService: MessageService,private router:Router) {
     
   }
   ngOnInit(): void {
@@ -60,15 +61,23 @@ export class PermissionsComponent implements OnInit {
       this.roleService.UpdateRolePermissions(this.RoleID, this.Permissions)
       .subscribe({
         next: (data) => {console.log('Updated role permissions:', data)
+     
+          
           this.messageService.add({ severity: 'info', summary: 'تم الحفظ', detail: 'تم حفظ التغيرات ' });
+           
         },
         error: (err) =>{console.log('Error updating role permissions:', err);
           this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'حدث خطأ أثناء الحفظ' });
         }
       });
+
+     
+
     }
 
   }
+
+ 
 
  
 }

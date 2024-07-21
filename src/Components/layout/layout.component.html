@@ -1,88 +1,177 @@
-<div class="container">
-  <div>
-    <!-- Main Content -->
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
-    <!-- End of Main Content -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+/>
+<div class="wrapper">
+  <div class="main" id="main">
+    <nav class="navbar navbar-expand px-3 border-bottom justify-content-end">
+      <button class="btn" id="sidebar-toggle" type="button">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+    <main class="content px-3 py-2">
+      <router-outlet />
+    </main>
+    <!-- (click)="toggleDarkMode() -->
+    <button class="border-0">
+      <!-- <a href="#" class="theme-toggle">
+        <i class="fa-regular fa-moon"></i>
+        <i class="fa-regular fa-sun"></i>
+      </a> -->
+    </button>
   </div>
-  <!-- Sidebar Section -->
-  <aside>
-    <div class="toggle">
-      <div class="logo">
-        <img src="assets/images/logo.png" />
-        <h2>Asmr<span class="danger">Prog</span></h2>
+  <aside id="sidebar" class="js-sidebar">
+    <!-- Content For Sidebar -->
+    <div class="h-100">
+      <div class="sidebar-logo">
+        <a href="#">Truck <span class="track-logo">Track</span></a>
       </div>
-      <div class="close" id="close-btn">
-        <span class="material-icons-sharp"> close </span>
-      </div>
-    </div>
+      <ul class="sidebar-nav">
+        <li class="sidebar-item">
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <i class="fa-solid fa-list pe-2"></i>
+            الرئيسية
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/roles']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['الإعدادات']"
+          >
+            <i class="bi bi-shield-check pe-2"></i>
+            الصلاحيات
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/employee']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['الموظفين']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
 
-    <div class="sidebar">
-      <a
-        href="#"
-        [routerLink]="['/']"
-        routerLinkActive="active"
-        [routerLinkActiveOptions]="{ exact: true }"
-      >
-        <span class="material-icons-sharp"> dashboard </span>
-        <h3>Dashboard</h3>
-      </a>
-      <a href="#" [routerLink]="['/role']" routerLinkActive="active">
-        <span class="material-icons-sharp"> person_outline </span>
-        <h3>الصلاحيات</h3>
-      </a>
-      <a href="#" [routerLink]="['/employee']" routerLinkActive="active">
-        <span class="material-icons-sharp"> person_outline </span>
-        <h3>الموظفين</h3>
-      </a>
-      <a href="#" [routerLink]="['/addorder']" routerLinkActive="active">
-        <span class="material-icons-sharp"> receipt_long </span>
-        <h3>Add Order</h3>
-      </a>
-
-      <a href="#">
-        <span class="material-icons-sharp"> insights </span>
-        <h3>Analytics</h3>
-      </a>
-
-      <!-- Link To Display Delivery Accounts  -->
-      <a [routerLink]="['/DeliveryAccounts']" routerLinkActive="active">
-        <span class="material-icons-sharp"> receipt_long </span>
-        <h3>المندوب</h3>
-      </a>
-
-      <!-- Link To Display Merchant Accounts  -->
-      <a [routerLink]="['/MerchantAccounts']" routerLinkActive="active">
-        <span class="material-icons-sharp"> receipt_long </span>
-        <h3>التاجر</h3>
-      </a>
-
-      <a href="#">
-        <span class="material-icons-sharp"> mail_outline </span>
-        <h3>Tickets</h3>
-        <span class="message-count">27</span>
-      </a>
-      <a href="#">
-        <span class="material-icons-sharp"> inventory </span>
-        <h3>Sale List</h3>
-      </a>
-      <a href="#">
-        <span class="material-icons-sharp"> report_gmailerrorred </span>
-        <h3>Reports</h3>
-      </a>
-      <a href="#">
-        <span class="material-icons-sharp"> settings </span>
-        <h3>Settings</h3>
-      </a>
-      <a href="#">
-        <span class="material-icons-sharp"> add </span>
-        <h3>New Login</h3>
-      </a>
-      <a href="#">
-        <span class="material-icons-sharp"> logout </span>
-        <h3>Logout</h3>
-      </a>
+            <i class="fa-regular fa-address-card pe-2"></i>
+            الموظفين
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/DeliveryAccounts']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['المندوبين']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-person-walking pe-2"></i>
+            المناديب
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/MerchantAccounts']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['التجار']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-comment-dollar pe-2"></i>
+            التجار
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/Branches']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['الفروع']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-code-branch pe-2"></i>
+            الفروع
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/Governments']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['المحافظات']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-building pe-2"></i>
+            المحافظات
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/Cities']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['المدن']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-city pe-2"></i>
+            المدن
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/orders']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['الطلبات']"
+          >
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="fa-solid fa-truck-fast pe-2"></i>
+            الطلبات
+          </a>
+        </li>
+        <li>
+          <a
+            href="#"
+            class="sidebar-link fs-6"
+            [routerLink]="['/report']"
+            routerLinkActive="menu-link-active"
+            [routerLinkActiveOptions]="{ exact: false }"
+            *ngIf="permissions['التقارير']"
+          >
+            <i class="fa-solid fa-file-contract pe-2"></i>
+            التقارير
+          </a>
+        </li>
+        <li id="logoutButton">
+          <a href="#" class="sidebar-link fs-6" (click)="logOut()">
+            <!-- *ngIf="permissions['الإعدادات']" -->
+            <i class="bi bi-box-arrow-right"></i>
+            تسجيل الخروج
+          </a>
+        </li>
+      </ul>
     </div>
   </aside>
-  <!-- End of Sidebar Section -->
 </div>

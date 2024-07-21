@@ -1,13 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild,ElementRef, OnChanges, SimpleChanges  } from '@angular/core';
-import { TableSharedModule } from '../../../shared/TableShared.module';
-import { RolesService } from '../../../AbdallahServices/roles.service';
+ 
+import { RolesService } from '../../../Services/roles.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { SharedModule } from '../../../shared/shared.module';
 declare var bootstrap: any;
 @Component({
   selector: 'app-dialog',
   standalone: true,
-  imports: [TableSharedModule],
+  imports: [SharedModule],
   templateUrl: './dialog.component.html',
   styleUrl: './dialog.component.css'
 })

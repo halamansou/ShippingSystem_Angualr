@@ -1,21 +1,18 @@
-
-import { Table } from 'primeng/table';
- 
-import { TableSharedModule } from '../../shared/TableShared.module';
 import { Component, ViewChild } from '@angular/core';
-import { RolesService } from '../../AbdallahServices/roles.service';
+import { RolesService } from '../../Services/roles.service';
+import { GlobalService } from '../../Services/global.service';
  
-import { DialogComponent } from './dialog/dialog.component';
+import { Table } from 'primeng/table';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '../../shared/shared.module';
+import { DialogComponent } from './dialog/dialog.component';
 import { MessageService } from 'primeng/api';
- 
+
+
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [TableSharedModule,DialogComponent,RouterLink,CommonModule ],
+  imports: [RouterLink,SharedModule,DialogComponent],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.css'
 })
@@ -25,12 +22,26 @@ export class RolesComponent {
   loading = true;
   @ViewChild('dt2') dt2!: Table;
   searchValue: string | undefined;
+  permissions:any =[];
 
-  constructor(public roleService: RolesService,private messageService: MessageService) {}
+  constructor(public roleService: RolesService,private messageService: MessageService,    private globalService:GlobalService) {
+  
+  }
 
   ngOnInit() {
     this.GetAll();
+   
+      // Usage example
+      this.globalService.loadGlobalData().then((permissions) => {
+    this.permissions =  this.globalService.getEntitiesPermissions(permissions,"الإعدادات");
+    console.log(this.permissions)
+        
+      }).catch((error) => {
+        console.error('Error loading permissions:', error);
+      });
+    
   }
+
   changeIdVal(id:number){
     
     this.DialogId=id;
@@ -83,5 +94,5 @@ export class RolesComponent {
   }
 
 
- 
+
 }

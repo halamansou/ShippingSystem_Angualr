@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { InputSwitchModule } from 'primeng/inputswitch';
-import { FormsModule } from '@angular/forms';
-import { TableModule } from 'primeng/table';
-import { PaginatorModule } from 'primeng/paginator';
-import { InputTextModule } from 'primeng/inputtext';
-import { DeliveryService } from '../../../AbdallahServices/delivery.service';
+ 
+import { Table   } from 'primeng/table';
+ 
+import { DeliveryService } from '../../../Services/delivery.service';
+ 
+import { GlobalService } from '../../../Services/global.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-delivery-accounts',
@@ -16,11 +17,7 @@ import { DeliveryService } from '../../../AbdallahServices/delivery.service';
     CommonModule,
     RouterLink,
     RouterLinkActive,
-    InputSwitchModule,
-    FormsModule,
-    TableModule,
-    PaginatorModule,
-    InputTextModule
+    SharedModule
   ],
   templateUrl: './delivery-accounts.component.html',
   styleUrls: ['./delivery-accounts.component.css']
@@ -33,10 +30,27 @@ export class DeliveryAccountsComponent implements OnInit {
   rows: number = 10;
   searchValue: string = '';
 
-  constructor(private _DeliveryService: DeliveryService, private _Router :Router) {}
+  
+
+ 
+  @ViewChild('dt2') dt2!: Table;
+ 
+  permissions:any =[];
+  constructor(private _DeliveryService: DeliveryService, private _Router :Router,    private globalService:GlobalService) {
+
+    
+  }
 
   ngOnInit(): void {
     this.loadDeliveryAccounts();
+    this.globalService.loadGlobalData().then((permissions) => {
+      this.permissions = this.globalService.getEntitiesPermissions(permissions,"المندوبين");
+      console.log(this.permissions)
+          
+        }).catch((error) => {
+          console.error('Error loading permissions:', error);
+        });
+  
   }
 
   loadDeliveryAccounts(): void {
@@ -98,6 +112,16 @@ export class DeliveryAccountsComponent implements OnInit {
 
 
   onEditAccount(id: number): void {
-    this._Router.navigate(['/UpdateDeliveryAccount', id]);
+    this._Router.navigate(['DeliveryAccounts/UpdateDeliveryAccount', id]);
   }
+  onInput(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    if (this.dt2) {
+      this.dt2.filterGlobal(inputElement.value, 'contains');
+    }
+  }
+  clear(table: Table) {
+    table.clear();
+    this.searchValue="";
+}
 }

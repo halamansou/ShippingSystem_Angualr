@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LayoutComponent } from '../Components/layout/layout.component';
+ 
+ 
+import { LayoutComponent } from '../Components/Layout/layout.component';
+ 
 
 @Component({
   selector: 'app-root',
@@ -10,5 +13,5 @@ import { LayoutComponent } from '../Components/layout/layout.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'ShippingSystem_Angualr';
+  title = 'FinalProjectTest';
 }

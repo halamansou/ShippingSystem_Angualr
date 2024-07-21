@@ -1,12 +1,16 @@
 import { Table } from 'primeng/table';
-import { EmployeeService } from '../../AbdallahServices/employee.service';
-import { TableSharedModule } from '../../shared/TableShared.module';
+import { EmployeeService } from '../../Services/employee.service';
+ 
 import { Component, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
+import { RouterLink } from '@angular/router';
+import { GlobalService } from '../../Services/global.service';
+import { SharedModule } from '../../shared/shared.module';
+ 
 @Component({
   selector: 'app-employees',
   standalone: true,
-  imports: [TableSharedModule],
+  imports: [SharedModule,RouterLink],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css'
 })
@@ -23,12 +27,23 @@ export class EmployeesComponent {
 
 
 
-
- constructor(public EmpService:EmployeeService,private messageService:MessageService) {
-  
+  permissions:any =[];
+ constructor(public EmpService:EmployeeService,private messageService:MessageService,    private globalService:GlobalService) {
+ 
  }
-  ngOnInit() {
+ 
+ ngOnInit() {
   this.GetAll();
+  this.globalService.loadGlobalData().then((permissions) => {
+    this.permissions = this.globalService.getEntitiesPermissions(permissions,"الموظفين");
+    console.log(this.permissions)
+        
+      }).catch((error) => {
+        console.error('Error loading permissions:', error);
+      });
+ 
+ 
+
   }
 
   clear(table: Table) {
@@ -63,6 +78,22 @@ export class EmployeesComponent {
         this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'حدث خطأ أثناء التعديل' });
 
       }
+    })
+  }
+
+  Delete(id:number){
+    this.EmpService.deleteEmployee(id).subscribe({
+      next:(data)=>console.log(data),
+      error:(err)=>{console.log(err);
+        this.messageService.add({ severity: 'error', summary: 'خطأ', detail: 'حدث خطأ أثناء الحذف' });
+
+      },
+      complete: ()=>{
+        this.Employees=this.Employees.filter((e:any)=>e.id!=id)
+        this.messageService.add({ severity: 'info', summary: 'تم الحفظ', detail: 'تم حذف الموظف ' });
+
+      }
+        
     })
   }
 
